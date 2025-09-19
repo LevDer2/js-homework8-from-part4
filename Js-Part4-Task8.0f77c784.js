@@ -714,8 +714,44 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"2R06K":[function(require,module,exports,__globalThis) {
-console.log('Hello world!');
+const input = document.querySelector("#bookmarkInput");
+const addBtn = document.querySelector("#addBookmarkBtn");
+const listRef = document.querySelector("#bookmarkList");
+let urlList = [];
+const render = function() {
+    listRef.innerHTML = urlList.map((url, index)=>`<li>
+      <a target="_blank" href="${url}">${url}</a>
+      <button type="button" data-index="${index}" class="delete">Del</button>
+      <button type="button" data-index="${index}" class="edit">Edit</button>
+    </li>`).join("");
+};
+addBtn.addEventListener("click", function() {
+    const url = input.value.trim();
+    // console.log(url);
+    if (url) {
+        urlList.push(url);
+        // console.log(urlList);
+        input.value = "";
+        render();
+    }
+});
+listRef.addEventListener("click", (event)=>{
+    // console.log(event.target.nodeName);
+    const index = event.target.dataset.index;
+    if (event.target.nodeName !== "BUTTON") return;
+    if (event.target.classList.contains("edit")) {
+        const newUrl = prompt("\u0420\u0435\u0434\u0430\u0433\u0443\u0439\u0442\u0435 \u043F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F", urlList[index]);
+        if (newUrl) {
+            urlList[index] = newUrl;
+            render();
+        }
+    }
+    if (event.target.classList.contains("delete")) {
+        urlList.splice(index, 1);
+        render();
+    }
+});
 
-},{}]},["7wZbQ","2R06K"], "2R06K", "parcelRequire778e", {})
+},{}]},["7wZbQ","2R06K"], "2R06K", "parcelRequirec6b4", {})
 
 //# sourceMappingURL=Js-Part4-Task8.0f77c784.js.map
