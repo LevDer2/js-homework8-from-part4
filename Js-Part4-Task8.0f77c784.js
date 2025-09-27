@@ -717,13 +717,17 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 const input = document.querySelector("#bookmarkInput");
 const addBtn = document.querySelector("#addBookmarkBtn");
 const listRef = document.querySelector("#bookmarkList");
-let urlList = [];
+let urlList = JSON.parse(localStorage.getItem("urlList")) || [];
 const render = function() {
     listRef.innerHTML = urlList.map((url, index)=>`<li>
       <a target="_blank" href="${url}">${url}</a>
       <button type="button" data-index="${index}" class="delete">Del</button>
       <button type="button" data-index="${index}" class="edit">Edit</button>
     </li>`).join("");
+};
+const save = function() {
+    localStorage.setItem("urlList", JSON.stringify(urlList));
+    render();
 };
 addBtn.addEventListener("click", function() {
     const url = input.value.trim();
@@ -732,7 +736,7 @@ addBtn.addEventListener("click", function() {
         urlList.push(url);
         // console.log(urlList);
         input.value = "";
-        render();
+        save();
     }
 });
 listRef.addEventListener("click", (event)=>{
@@ -743,13 +747,31 @@ listRef.addEventListener("click", (event)=>{
         const newUrl = prompt("\u0420\u0435\u0434\u0430\u0433\u0443\u0439\u0442\u0435 \u043F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F", urlList[index]);
         if (newUrl) {
             urlList[index] = newUrl;
-            render();
+            save();
         }
     }
     if (event.target.classList.contains("delete")) {
         urlList.splice(index, 1);
-        render();
+        save();
     }
+});
+render();
+const userName = document.querySelector("#username");
+const password = document.querySelector("#password");
+const saveBtn = document.querySelector("#saveBtn");
+userName.value = localStorage.getItem("userName") || "";
+password.value = localStorage.getItem("password") || "";
+userName.addEventListener("input", function() {
+    return localStorage.setItem("userName", userName.value);
+});
+password.addEventListener("input", function() {
+    return localStorage.setItem("password", password.value);
+});
+saveBtn.addEventListener("click", ()=>{
+    localStorage.removeItem("userName");
+    localStorage.removeItem("password");
+    userName.value = "";
+    password.value = "";
 });
 
 },{}]},["7wZbQ","2R06K"], "2R06K", "parcelRequirec6b4", {})
