@@ -2,7 +2,7 @@ const input = document.querySelector("#bookmarkInput");
 const addBtn = document.querySelector("#addBookmarkBtn");
 const listRef = document.querySelector("#bookmarkList");
 
-let urlList = [];
+let urlList = JSON.parse(localStorage.getItem("urlList")) || [];
 
 const render = function () {
   listRef.innerHTML = urlList
@@ -17,6 +17,11 @@ const render = function () {
     .join("");
 };
 
+const save = function () {
+  localStorage.setItem("urlList", JSON.stringify(urlList));
+  render()
+};
+
 addBtn.addEventListener("click", function () {
   const url = input.value.trim();
   // console.log(url);
@@ -24,7 +29,7 @@ addBtn.addEventListener("click", function () {
     urlList.push(url);
     // console.log(urlList);
     input.value = "";
-    render();
+    save();
   }
 });
 
@@ -38,12 +43,35 @@ listRef.addEventListener("click", (event) => {
     const newUrl = prompt("Редагуйте посилання", urlList[index]);
     if (newUrl) {
       urlList[index] = newUrl;
-      render();
+      save();
     }
   }
 
   if (event.target.classList.contains("delete")) {
     urlList.splice(index, 1);
-    render();
+    save();
   }
+});
+
+render()
+
+const userName = document.querySelector("#username");
+const password = document.querySelector("#password");
+const saveBtn = document.querySelector("#saveBtn");
+
+userName.value = localStorage.getItem("userName") || "";
+password.value = localStorage.getItem("password") || "";
+
+userName.addEventListener("input", function () {
+  return localStorage.setItem("userName", userName.value);
+});
+password.addEventListener("input", function () {
+  return localStorage.setItem("password", password.value);
+});
+
+saveBtn.addEventListener("click", () => {
+  localStorage.removeItem("userName");
+  localStorage.removeItem("password");
+  userName.value = "";
+  password.value = "";
 });
